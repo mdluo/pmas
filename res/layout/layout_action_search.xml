@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <EditText
+        android:id="@+id/edittext_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:drawableLeft="@drawable/ic_action_search"
+        android:ems="1000"
+        android:imeOptions="actionSearch"
+        android:maxLength="5"
+        android:inputType="textUri"
+        android:paddingLeft="0dp"
+        android:singleLine="true" 
+        android:hint="@string/activity_contact_search">
+
+        <requestFocus />
+    </EditText>
+
+</LinearLayout>

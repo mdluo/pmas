@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="20dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="10dp" >
+
+            <ImageSwitcher
+                android:id="@+id/imageSwitcher1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/ic_contact_picture_180_holo_light" >
+            </ImageSwitcher>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingTop="5dp" >
+
+            <EditText
+                android:id="@+id/editText_Contact_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/form_contact_name"
+                android:inputType="textPersonName" >
+
+                <requestFocus />
+            </EditText>
+
+            <Spinner
+                android:id="@+id/spinner_Contact_group"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="30dp" >
+
+        <EditText
+            android:id="@+id/editText_Contact_phone"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="30dp"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_action_phone"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="@string/form_contact_phone"
+            android:inputType="phone"
+            android:paddingLeft="5dp" />
+
+        <EditText
+            android:id="@+id/editText_Contact_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:drawableLeft="@drawable/ic_action_email"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="@string/form_contact_email"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="5dp" />
+
+        <EditText
+            android:id="@+id/editText_Contact_birthday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:drawableLeft="@drawable/ic_action_date"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="@string/form_contact_birthday"
+            android:inputType="date"
+            android:paddingLeft="5dp" />
+
+        <EditText
+            android:id="@+id/editText_Contact_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:drawableLeft="@drawable/ic_action_location"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="@string/form_contact_address"
+            android:inputType="textPostalAddress"
+            android:paddingLeft="5dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,72 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/layout_contact_item_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textview_contact_item_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#33B5E5" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#33B5E5" >
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal" 
+        android:background="@drawable/list_bg_selector">
+
+        <CheckBox
+            android:id="@+id/checkbox_contact_context"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
+
+        <TextView
+            android:id="@+id/textview_contact_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:textColor="#333" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <QuickContactBadge
+                android:id="@+id/quickcontact_contact_item"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="right"
+                android:background="@drawable/ic_contact_picture_180_holo_light"
+                android:gravity="right" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_contact_item_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eee"
+    	android:orientation="vertical" >
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PMAS</string>
+    
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string-array name="drawer_items">
+        <item>联系人</item>
+        <item>记事本</item>
+        <item>日程</item>
+        <item>关于</item>
+        <item>退出</item>
+    </string-array>
+    
+    <string name="activity_contact">联系人</string>
+    <string name="action_contact_search">搜索</string>
+    <string name="action_contact_group">群组</string>
+    <string name="action_contact_add">添加</string>
+    <string name="action_contact_random">添加随机</string>
+    <string name="action_contact_more">更多</string>
+    <string name="action_contact_import">导入</string>
+    <string name="action_contact_clear">清空</string>
+    <string name="action_contact_delete">删除</string>
+    <string name="action_contact_all">全选</string>
+    
+    <string name="activity_contact_search">搜索联系人</string>
+    <string name="activity_contact_add">添加联系人</string>
+    <string name="activity_contact_edit">编辑联系人</string>
+    <string name="action_contact_save">保存</string>
+    <string name="action_contact_edit">编辑</string>
+    
+    <string name="form_contact_name">姓名</string>
+    <string name="form_contact_phone">电话</string>
+    <string name="form_contact_email">电子邮件</string>
+    <string name="form_contact_birthday">生日</string>
+    <string name="form_contact_address">地址</string>
+    
+    <string name="activity_contact_group">联系人群组</string>
+
+
+</resources>

@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_contact_group_add"
+        android:orderInCategory="1"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_group_add"
+        android:title="@string/action_contact_add"/>
+    
+</menu>
