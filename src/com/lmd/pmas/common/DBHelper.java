@@ -37,8 +37,7 @@ public class DBHelper extends SQLiteOpenHelper{
 				"pmas_contact_group (" +
 				"_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 				"name TEXT, " +
-				"description TEXT, " +
-				"count INTEGER " +
+				"description TEXT " +
 				")");
 		
 	}

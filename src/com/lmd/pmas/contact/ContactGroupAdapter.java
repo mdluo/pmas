@@ -1,5 +1,6 @@
 package com.lmd.pmas.contact;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.lmd.pmas.R;
 import android.annotation.SuppressLint;
@@ -41,7 +42,10 @@ public class ContactGroupAdapter extends ArrayAdapter<ContactGroupModel>{
 		
 		name.setText(cGroupModel.getName());
 		description.setText(cGroupModel.getDescription());
-		count.setText("( "+cGroupModel.getCount()+" )");
+		
+		ArrayList<ContactModel> contactModels = activity.contactDao.query(cGroupModel.get_id(), ContactDao.QUERY_BY_GROUP);
+		
+		count.setText("( "+contactModels.size()+" )");
 		
 		CheckBox checkBox = (CheckBox) layout.findViewById(R.id.checkbox_contact_grroup_context);
 		LinearLayout editLayout = (LinearLayout) layout.findViewById(R.id.layout_contact_group_edit);

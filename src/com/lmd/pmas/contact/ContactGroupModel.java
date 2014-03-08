@@ -5,7 +5,6 @@ public class ContactGroupModel {
 	private int _id;
 	private String name;
 	private String description;
-	private int count;
 
 	public int get_id() {
 		return _id;
@@ -24,11 +23,5 @@ public class ContactGroupModel {
 	}
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	public int getCount() {
-		return count;
-	}
-	public void setCount(int count) {
-		this.count = count;
 	}
 }

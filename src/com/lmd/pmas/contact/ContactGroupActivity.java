@@ -41,8 +41,8 @@ public class ContactGroupActivity extends Activity {
 	/**
 	 * Dao成员变量
 	 */
-	private ContactGroupDao cGroupDao;
-	private ContactDao contactDao;
+	public ContactGroupDao cGroupDao;
+	public ContactDao contactDao;
 	
 	/**
 	 * 数据模型变量
@@ -165,8 +165,6 @@ public class ContactGroupActivity extends Activity {
 	private void refreshData() {
 		listDada.clear();
 		checkedList.clear();
-		ArrayList<ContactModel> defaultContacts = contactDao.query(0, ContactDao.QUERY_BY_GROUP);
-		defaultGroupModel.setCount(defaultContacts.size());
 		
 		listDada.add(defaultGroupModel);
 		listDada.addAll(cGroupDao.query());
@@ -329,7 +327,6 @@ public class ContactGroupActivity extends Activity {
 						if (position == 0) {
 							cGroupModel.setName(groupName.getText().toString());
 							cGroupModel.setDescription(groupDescription.getText().toString());
-							cGroupModel.setCount(0);
 							cGroupDao.insert(cGroupModel);
 						}
 						else {
