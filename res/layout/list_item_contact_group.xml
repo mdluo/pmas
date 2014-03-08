@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:descendantFocusability= "blocksDescendants" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,33 +18,75 @@
             android:focusable="false"
             android:focusableInTouchMode="false" />
 
-        <TextView
-            android:id="@+id/textview_contact_group_text"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall"
-            android:textColor="#333" />
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/textview_contact_group_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="0dp"
+                android:text="Group Name"
+                android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                android:textColor="#333" />
+            
+            <TextView
+                android:id="@+id/textview_contact_group_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="2dp"
+                android:text="Group Description"
+                android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                android:textColor="#777"
+                android:textSize="12sp" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
-
+            android:gravity="right"
+            android:orientation="horizontal" >
+            
             <LinearLayout
-                android:id="@+id/layout_contact_group_edit"
+                android:id="@+id/layout_contact_group_num"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:gravity="center_vertical|center_horizontal"
                 android:orientation="vertical" >
 
+                <TextView
+                    android:id="@+id/textview_contact_group_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="( 10 )"
+                    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                    android:textColor="#333" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_contact_group_edit"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:focusable = "false"
+                android:background="@drawable/list_bg_selector" >
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_action_edit" />
-
             </LinearLayout>
            
         </LinearLayout>

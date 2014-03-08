@@ -268,11 +268,28 @@ public class ContactEditActivity extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
+				
+				if (contactModel.getGr_id() != 0) {
+					ContactGroupModel cGroupModel = cGroupDao.query(contactModel.getGr_id());
+					int count = cGroupModel.getCount();
+					if (count == 0) {
+						cGroupModel.setCount(0);
+					}
+					else {
+						cGroupModel.setCount(count-1);
+					}
+					cGroupDao.update(cGroupModel);
+				}
+				
 				if (arg2 == 0) {
 					contactModel.setGr_id(0);
 				}
 				else {
-					contactModel.setGr_id(contactGroups.get(arg2-1).get_id());
+					int gr_id = contactGroups.get(arg2-1).get_id();
+					ContactGroupModel cGroupModel = cGroupDao.query(gr_id);
+					cGroupModel.setCount(cGroupModel.getCount()+1);
+					cGroupDao.update(cGroupModel);
+					contactModel.setGr_id(gr_id);
 				}
 			}
 			@Override

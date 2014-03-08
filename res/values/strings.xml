@@ -37,6 +37,8 @@
     <string name="form_contact_address">地址</string>
     
     <string name="activity_contact_group">联系人群组</string>
+    <string name="form_contact_group_name">群组名</string>
+    <string name="form_contact_group_description">描述</string>
 
 
 </resources>

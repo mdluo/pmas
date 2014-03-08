@@ -523,13 +523,7 @@ public class ContactActivity extends Activity {
 								actionMode.finish();
 							}
 						})
-						.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(
-									DialogInterface arg0,
-									int arg1) {
-							}
-						})
+						.setNegativeButton("取消", null)
 						.create();
 					deleteDialog.show();
 					return true;

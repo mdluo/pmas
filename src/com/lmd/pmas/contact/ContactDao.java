@@ -60,9 +60,6 @@ public class ContactDao extends DBDao<ContactModel>{
 			break;
 		}
 		ArrayList<ContactModel> contactModels = query(section, new String[]{id+""});
-		if (contactModels == null || contactModels.size() == 0) {
-			return null;
-		}
 		return contactModels;
 	}
 	
