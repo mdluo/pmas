@@ -117,6 +117,7 @@ public class ContactDetailActivity extends Activity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			finish();
+			overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
             return true;
 		case R.id.action_contact_detail_edit:
 			Intent intent = new Intent(ContactDetailActivity.this, ContactEditActivity.class);
@@ -125,7 +126,7 @@ public class ContactDetailActivity extends Activity {
 			bundle.putInt("_id", contactModel.get_id());
 			intent.putExtras(bundle);
 			startActivity(intent);
-			//finish();
+			overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             return true;
 		case R.id.action_contact_detail_delete:
 			Dialog deleteDialog = new AlertDialog.Builder(ContactDetailActivity.this)
@@ -136,6 +137,7 @@ public class ContactDetailActivity extends Activity {
 					public void onClick( DialogInterface arg0, int arg1) {
 						contactDao.delete(contactModel.get_id());
 						finish();
+						overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
 						Toast.makeText(ContactDetailActivity.this,"已删除 ",Toast.LENGTH_LONG).show();
 					}
 				})

@@ -115,9 +115,10 @@ public class ContactGroupActivity extends Activity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			finish();
+			overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
 			return true;
-			default:
-				return super.onOptionsItemSelected(item);
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 	
@@ -220,7 +221,7 @@ public class ContactGroupActivity extends Activity {
 					final ActionMode actionMode = arg0;
 					Dialog deleteDialog = new AlertDialog.Builder(ContactGroupActivity.this)
 						.setTitle("确定删除")
-						.setMessage("删除选中的联系人？")
+						.setMessage("删除选中的群组？\n注意：如果群组不为空，群组里的联系人将")
 						.setPositiveButton("删除", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick( DialogInterface arg0, int arg1) {

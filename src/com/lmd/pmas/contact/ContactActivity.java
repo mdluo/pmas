@@ -218,6 +218,7 @@ public class ContactActivity extends Activity {
 		case R.id.action_contact_group:
 			Intent intentGroup = new Intent(this, ContactGroupActivity.class);
 			startActivity(intentGroup);
+			overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 			return true;
 			
 		case R.id.action_contact_add:
@@ -228,6 +229,7 @@ public class ContactActivity extends Activity {
 			// TODO 判断当前激活的群组传给ContactEditActivity
 			intentAdd.putExtras(bundle);
 			startActivity(intentAdd);
+			overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 			return true;
 		/*	
 		case R.id.action_contact_random:
@@ -459,6 +461,7 @@ public class ContactActivity extends Activity {
 				bundle.putInt("_id", listDada.get(arg2).get_id());
 				intent.putExtras(bundle);
 				startActivity(intent);
+				overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 			}
 		});
 

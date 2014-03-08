@@ -131,6 +131,7 @@ public class ContactEditActivity extends Activity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			finish();
+			overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
             return true;
 		case R.id.action_contact_edit_save:
 			saveContact();
@@ -336,6 +337,7 @@ public class ContactEditActivity extends Activity {
 			}
 			Toast.makeText(this, "已保存", Toast.LENGTH_LONG).show();
 			finish();
+			overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
 		}
 	}
 	
