@@ -1,11 +1,9 @@
 package com.lmd.pmas.contact;
 
-import java.text.ParseException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-
 import com.lmd.pmas.R;
 import com.lmd.pmas.common.Chinese;
 
@@ -86,7 +84,7 @@ public class ContactEditActivity extends Activity {
 	 * 临时变量
 	 */
 	Calendar birthdayCalendar;
-	Date birthdayDate;
+	DecimalFormat decimalFormat;
 	
 	/**
 	 * Activity回调函数
@@ -152,12 +150,14 @@ public class ContactEditActivity extends Activity {
 			case CONTACT_ADD:
 				return new DatePickerDialog(this, dateSetListener, 1990, 0, 1);
 			case CONTACT_EDIT:
-				if (contactModel.getBirthday() == 0 || birthdayDate == null) {
+				if (contactModel.getBirthday() == 0 || birthdayCalendar == null) {
 					return new DatePickerDialog(this, dateSetListener, 1990, 0, 1);
 				}
 				else {
 					return new DatePickerDialog(this, dateSetListener, 
-							birthdayDate.getYear(), birthdayDate.getMonth(), birthdayDate.getDay());
+							birthdayCalendar.get(Calendar.YEAR), 
+							birthdayCalendar.get(Calendar.MONTH), 
+							birthdayCalendar.get(Calendar.DAY_OF_MONTH));
 				}
 			}
 		
@@ -196,6 +196,7 @@ public class ContactEditActivity extends Activity {
 		}
 
 		birthdayCalendar = Calendar.getInstance();
+		decimalFormat = new DecimalFormat("00");
 	}
 	
 	void initActionBar() {
@@ -233,18 +234,15 @@ public class ContactEditActivity extends Activity {
 		phoneText.setText(contactModel.getPhone());
 		emailText.setText(contactModel.getEmail());
 		addressText.setText(contactModel.getAddress());
+
+		Long time = new Long(contactModel.getBirthday());
+		time *= 1000;
+		birthdayCalendar.setTimeInMillis(time);
 		
 		if (mode == CONTACT_EDIT) {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Long time = new Long(contactModel.getBirthday());
-			time *= 1000;
 			if (time > 0) {
 				String birthdayStr = format.format(time);
-				try {
-					birthdayDate = format.parse(birthdayStr);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
 				birthdayText.setText(birthdayStr);
 			}
 			if (contactModel.get_id() == 0 || contactGroups == null) {
@@ -284,7 +282,9 @@ public class ContactEditActivity extends Activity {
 		dateSetListener = new DatePickerDialog.OnDateSetListener() {
 			@Override
 			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-				birthdayText.setText(year + "-" +(monthOfYear+1) + "-" +dayOfMonth);
+				birthdayText.setText(year + "-" 
+					+ decimalFormat.format((monthOfYear+1)) + "-" 
+					+ decimalFormat.format(dayOfMonth));
 				birthdayCalendar.set(year, monthOfYear, dayOfMonth);
 				contactModel.setBirthday((int)(birthdayCalendar.getTimeInMillis()/1000));
 			}

@@ -9,19 +9,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.view.ActionMode;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class ContactGroupActivity extends Activity {
@@ -94,6 +89,9 @@ public class ContactGroupActivity extends Activity {
 
 		// 初始化ActionBar
 		initActionBar();
+		
+		// 初始化监听器
+		initListener();
 	}
 	
 	@Override
@@ -104,7 +102,7 @@ public class ContactGroupActivity extends Activity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.contact, menu);
+		getMenuInflater().inflate(R.menu.contact_group, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -140,7 +138,6 @@ public class ContactGroupActivity extends Activity {
 	private void initView() {
 		groupListView = (ListView) findViewById(R.id.listview_group);
 		groupListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		groupListView.setDivider(null);
 	}
 	
 	private void initData() {
@@ -150,6 +147,7 @@ public class ContactGroupActivity extends Activity {
 		defaultGroupModel.setDescription("");
 		
 		listDada = new ArrayList<ContactGroupModel>();
+		checkedList = new ArrayList<Boolean>();
 		arrayAdapter = new ContactGroupAdapter(this, R.layout.list_item_contact_group,
 				R.id.textview_contact_group_text, listDada);
 		groupListView.setAdapter(arrayAdapter);
@@ -158,10 +156,17 @@ public class ContactGroupActivity extends Activity {
 	
 	private void refreshData() {
 		listDada.clear();
-		
+		checkedList.clear();
 		ArrayList<ContactModel> defaultContacts = contactDao.query(0, ContactDao.QUERY_BY_GROUP);
+		defaultGroupModel.setCount(defaultContacts.size());
 		
+		listDada.add(defaultGroupModel);
 		listDada.addAll(cGroupDao.query());
+		
+		for (int i = 0; i < listDada.size(); i++) {
+			checkedList.add(false);
+		}
+		
 		arrayAdapter.notifyDataSetChanged();
 	}	
 	
@@ -174,14 +179,6 @@ public class ContactGroupActivity extends Activity {
 	
 	private void initListener() {
 		
-		groupListView.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO 跳转到ContactActivity
-				
-			}
-		});
 		
 		groupListView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 			

@@ -216,17 +216,18 @@ public class ContactActivity extends Activity {
 			return true;
 			
 		case R.id.action_contact_group:
-
+			Intent intentGroup = new Intent(this, ContactGroupActivity.class);
+			startActivity(intentGroup);
 			return true;
 			
 		case R.id.action_contact_add:
-			Intent intent = new Intent(this, ContactEditActivity.class);
+			Intent intentAdd = new Intent(this, ContactEditActivity.class);
 			Bundle bundle = new Bundle();
 			bundle.putInt("mode", ContactEditActivity.CONTACT_ADD);
 
 			// TODO 判断当前激活的群组传给ContactEditActivity
-			intent.putExtras(bundle);
-			startActivity(intent);
+			intentAdd.putExtras(bundle);
+			startActivity(intentAdd);
 			return true;
 		/*	
 		case R.id.action_contact_random:
@@ -343,6 +344,8 @@ public class ContactActivity extends Activity {
 		arrayAdapter = new ContactAdapter(this, R.layout.list_item_contact,
 				R.id.textview_contact_text, listDada);
 		contactListView.setAdapter(arrayAdapter);
+		
+		checkedList = new ArrayList<Boolean>(listDada.size());
 
 		refreshData();
 	}
@@ -357,7 +360,7 @@ public class ContactActivity extends Activity {
 		Comparator<ContactModel> comparator = new ContactComparator();
 		Collections.sort(listDada, comparator);
 
-		checkedList = new ArrayList<Boolean>(listDada.size());
+		checkedList.clear();
 		for (int i = 0; i < listDada.size(); i++) {
 			checkedList.add(false);
 		}
