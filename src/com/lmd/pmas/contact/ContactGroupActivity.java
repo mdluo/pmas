@@ -9,11 +9,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -184,6 +188,21 @@ public class ContactGroupActivity extends Activity {
 	}
 	
 	private void initListener() {
+		
+		groupListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Bundle bundle = new Bundle();
+				bundle.putInt("gr_id", listDada.get(arg2).get_id());
+				Intent intent = new Intent();
+				intent.putExtras(bundle);
+				setResult(RESULT_OK, intent);
+				finish();
+				overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+			}
+		});
 		
 		groupListView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 			

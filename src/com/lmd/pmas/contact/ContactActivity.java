@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -86,6 +87,7 @@ public class ContactActivity extends Activity {
 	/**
 	 * Dao成员变量
 	 */
+	private ContactGroupDao cGroupDao;
 	private ContactDao contactDao;
 
 	/**
@@ -96,7 +98,12 @@ public class ContactActivity extends Activity {
 	 * 数据存储变量
 	 */
 	private String[] menuListData;
+	
 	private ArrayList<ContactModel> listDada;
+	private ArrayList<ContactGroupModel> cGroupModels;
+	
+	private ArrayList<String> actionData;
+	private ArrayAdapter<String> actionAdapter;
 
 	/**
 	 * 状态变量
@@ -106,7 +113,7 @@ public class ContactActivity extends Activity {
 	public ArrayList<Boolean> checkedList;
 	public int checkedNum;
 	private int importNum;
-
+	private int gr_id;
 	/**
 	 * 临时变量
 	 */
@@ -123,16 +130,17 @@ public class ContactActivity extends Activity {
 		setContentView(R.layout.activity_contact);
 
 		// 初始化context
+		cGroupDao = new ContactGroupDao(this);
 		contactDao = new ContactDao(this);
 
 		// 初始化View成员变量
 		initView();
+		
+		// 初始化ActionBar
+		initActionBar();
 
 		// 初始化数据
 		initData();
-
-		// 初始化ActionBar
-		initActionBar();
 
 		// 初始化左部菜单
 		initDrawer(savedInstanceState);
@@ -146,6 +154,15 @@ public class ContactActivity extends Activity {
 	protected void onResume() {
 		refreshData();
 		super.onResume();
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			gr_id = data.getExtras().getInt("gr_id");
+			refreshData();
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
@@ -217,7 +234,7 @@ public class ContactActivity extends Activity {
 			
 		case R.id.action_contact_group:
 			Intent intentGroup = new Intent(this, ContactGroupActivity.class);
-			startActivity(intentGroup);
+			startActivityForResult(intentGroup, 0);
 			overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
 			return true;
 			
@@ -343,6 +360,30 @@ public class ContactActivity extends Activity {
 
 	private void initData() {
 		listDada = new ArrayList<ContactModel>();
+		actionData = new ArrayList<String>();
+		
+		gr_id = -1;
+		actionAdapter = new ArrayAdapter<String>(this, R.layout.list_item_menu, actionData);
+		
+		actionBar.setListNavigationCallbacks(actionAdapter, new OnNavigationListener() {
+			@Override
+			public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+				if (itemPosition == 0) {
+					gr_id = -1;
+					refreshData();
+					return false;
+				}
+				else if (itemPosition == 1) {
+					gr_id = 0;
+				}
+				else {
+					gr_id = cGroupModels.get(itemPosition-2).get_id();
+				}
+				refreshData();
+				return false;
+			}
+		});
+		
 		arrayAdapter = new ContactAdapter(this, R.layout.list_item_contact,
 				R.id.textview_contact_text, listDada);
 		contactListView.setAdapter(arrayAdapter);
@@ -354,7 +395,25 @@ public class ContactActivity extends Activity {
 
 	private void refreshData() {
 		listDada.clear();
-		listDada.addAll(contactDao.query());
+		
+		if (gr_id == -1) {
+			listDada.addAll(contactDao.query());
+			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		}
+		else {
+			listDada.addAll(contactDao.query(gr_id, ContactDao.QUERY_BY_GROUP));
+			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		}
+		
+		actionData.clear();
+		actionData.add("全部");
+		actionData.add("默认群组");
+		cGroupModels = cGroupDao.query();
+		for (ContactGroupModel contactGroupModel : cGroupModels) {
+			actionData.add(contactGroupModel.getName());
+		}
+		
+		actionAdapter.notifyDataSetChanged();
 		resortData();
 	}
 	
@@ -383,6 +442,7 @@ public class ContactActivity extends Activity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayShowCustomEnabled(true);
+		
 	}
 
 	private void initDrawer(Bundle savedInstanceState) {

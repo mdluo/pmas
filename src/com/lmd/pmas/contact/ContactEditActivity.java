@@ -1,18 +1,31 @@
 package com.lmd.pmas.contact;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import com.lmd.pmas.R;
 import com.lmd.pmas.common.Chinese;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +37,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.QuickContactBadge;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -55,6 +69,8 @@ public class ContactEditActivity extends Activity {
 	EditText birthdayText;
 	EditText addressText;
 	
+	QuickContactBadge mPhotoView;
+	
 	/**
 	 * Dao成员变量
 	 */
@@ -66,6 +82,7 @@ public class ContactEditActivity extends Activity {
 	 */
 	ArrayList<ContactGroupModel> contactGroups;
 	ContactModel contactModel;
+	ContactModel backUpModel;
 
 	/**
 	 * 数据存储变量
@@ -79,6 +96,13 @@ public class ContactEditActivity extends Activity {
 	public final static int CONTACT_EDIT 	= 1;
 	private Bundle bundle;
 	private int mode;
+	
+    private static final int PHOTO_REQUEST_TAKEPHOTO = 1;// 拍照
+    private static final int PHOTO_REQUEST_GALLERY = 2;// 从相册中选择
+    private static final int PHOTO_REQUEST_CUT = 3;// 结果
+    
+    // 创建一个以当前时间为名称的文件
+    File tempFile;
 
 	/**
 	 * 临时变量
@@ -105,6 +129,8 @@ public class ContactEditActivity extends Activity {
  		cGroupDao = new ContactGroupDao(this);
  		contactDao = new ContactDao(this);
  		
+ 		tempFile = new File(Environment.getExternalStorageDirectory(), getPhotoFileName());
+ 		
  		initActionBar();
  		
  		// 初始化数据
@@ -119,6 +145,32 @@ public class ContactEditActivity extends Activity {
  		initListener();
 	}
 	
+	
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+
+        switch (requestCode) {
+        case PHOTO_REQUEST_TAKEPHOTO:
+            startPhotoZoom(Uri.fromFile(tempFile), 150);
+            break;
+
+        case PHOTO_REQUEST_GALLERY:
+            if (data != null)
+                startPhotoZoom(data.getData(), 150);
+            break;
+
+        case PHOTO_REQUEST_CUT:
+            if (data != null) 
+                setPicToView(data);
+            break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+    
+
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.contact_edit, menu);
@@ -130,8 +182,7 @@ public class ContactEditActivity extends Activity {
 		
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			finish();
-			overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+			back();
             return true;
 		case R.id.action_contact_edit_save:
 			saveContact();
@@ -209,10 +260,28 @@ public class ContactEditActivity extends Activity {
 		switch (mode) {
 		case CONTACT_ADD:
 	 		contactModel = new ContactModel();
+	 		backUpModel = new ContactModel();
+	 		backUpModel.setName("");
+	 		backUpModel.setAddress("");
+	 		backUpModel.setEmail("");
+	 		backUpModel.setPhone("");
 			actionBar.setTitle(getResources().getString(R.string.activity_contact_add));
 			break;
 		case CONTACT_EDIT:
 	 		contactModel = contactDao.query(bundle.getInt("_id"), ContactDao.QUERY_BY_ID).get(0);
+	 		backUpModel = contactModel.clone();
+	 		if (backUpModel.getAddress() == null) {
+	 			backUpModel.setAddress("");
+			}
+	 		if (backUpModel.getEmail() == null) {
+				backUpModel.setEmail("");
+			}
+	 		if (backUpModel.getName() == null) {
+				backUpModel.setName("");
+			}
+	 		if (backUpModel.getPhone() == null) {
+				backUpModel.setName("");
+			}
 			actionBar.setTitle(contactModel.getName());
 			break;
 		}
@@ -308,7 +377,72 @@ public class ContactEditActivity extends Activity {
 			}
 		});
 		
-	}
+		mPhotoView = (QuickContactBadge) findViewById(R.id.image_contact_edit_head);
+		mPhotoView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Dialog headDialog = new AlertDialog.Builder(ContactEditActivity.this)
+					.setTitle("选择头像图片")
+					.setPositiveButton("拍照", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
+	                        startActivityForResult(intent, PHOTO_REQUEST_TAKEPHOTO);
+						}
+					})
+					.setNegativeButton("相册", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+	                        Intent intent = new Intent(Intent.ACTION_PICK, null);
+	                        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+	                        startActivityForResult(intent, PHOTO_REQUEST_GALLERY);
+						}
+					})
+					.create();
+				headDialog.show();
+			}
+		});
+		
+	}    
+	
+	
+	private String getPhotoFileName() {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("'IMG'_yyyyMMdd_HHmmss", Locale.getDefault());
+        return dateFormat.format(date) + ".jpg";
+    }
+	
+    private void startPhotoZoom(Uri uri, int size) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        // crop为true是设置在开启的intent中设置显示的view可以剪裁
+        intent.putExtra("crop", "true");
+
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+
+        // outputX,outputY 是剪裁图片的宽高
+        intent.putExtra("outputX", size);
+        intent.putExtra("outputY", size);
+        intent.putExtra("return-data", true);
+
+        startActivityForResult(intent, PHOTO_REQUEST_CUT);
+    }
+
+    //将进行剪裁后的图片显示到UI界面上
+    @SuppressLint("NewApi")
+	private void setPicToView(Intent picdata) {
+        Bundle bundle = picdata.getExtras();
+        if (bundle != null) {
+            Bitmap photo = bundle.getParcelable("data");
+			Drawable drawable = new BitmapDrawable(getResources(), photo);
+            mPhotoView.setBackground(drawable);
+        }
+    }
 	
 	void saveContact() {
 		
@@ -341,4 +475,36 @@ public class ContactEditActivity extends Activity {
 		}
 	}
 	
+	void back() {
+		
+		String nameString = nameText.getText().toString();
+		String phoneString = phoneText.getText().toString();
+		String emailString = emailText.getText().toString();
+		String address = addressText.getText().toString();
+		
+		if ( nameString.equals(backUpModel.getName()) && 
+			 phoneString.equals(backUpModel.getPhone()) &&
+			 emailString.equals(backUpModel.getEmail()) &&
+			 address.equals(backUpModel.getAddress()) &&
+			 contactModel.getBirthday() == backUpModel.getBirthday()) {
+			finish();
+			overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+		}
+		else {
+			Dialog backDialog = new AlertDialog.Builder(this)
+				.setTitle("确定返回")
+				.setMessage("您已修改联系人信息，是不保存修改而直接返回")
+				.setPositiveButton("不保存", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						finish();
+						overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+					}
+				})
+				.setNegativeButton("取消", null)
+				.create();
+			backDialog.show();
+		}
+		
+	}
 }

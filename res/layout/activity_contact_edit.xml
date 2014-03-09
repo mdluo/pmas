@@ -17,12 +17,12 @@
             android:orientation="vertical"
             android:paddingTop="10dp" >
 
-            <ImageSwitcher
-                android:id="@+id/imageSwitcher1"
+            <QuickContactBadge
+                android:id="@+id/image_contact_edit_head"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:background="@drawable/ic_contact_picture_180_holo_light" >
-            </ImageSwitcher>
+            </QuickContactBadge>
         </LinearLayout>
 
         <LinearLayout

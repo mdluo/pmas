@@ -1,6 +1,6 @@
 package com.lmd.pmas.contact;
 
-public class ContactModel{
+public class ContactModel implements Cloneable{
 	private int _id;
 	private int gr_id;
 	private String name;
@@ -10,6 +10,17 @@ public class ContactModel{
 	private String email;
 	private String address;
 	
+    public ContactModel clone(){
+    	ContactModel o = null;
+        try{
+            o = (ContactModel)super.clone();
+        }
+        catch(CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+        return o;
+    }
+    
 	public int get_id() {
 		return _id;
 	}
